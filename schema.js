@@ -3,19 +3,18 @@ import { gql } from "apollo-server";
 
 const typeDefs = gql`
   type Profile {
-    id: ID!
-    username: String!
-    name: String!
-    bio: String
-    avatarURL: String
-    coverURL: String
-    followersCount: Int!
-    followingCount: Int!
-    postsCount: Int!
-    followers:[Profile]
-    following:[Profile]
-    
-  }
+  id: ID!
+  username: String!
+  name: String!
+  bio: String
+  avatarURL: String
+  coverURL: String
+  followersCount: Int!
+  followingCount: Int!
+  postsCount: Int!
+  followers: [ID!]!
+  following: [ID!]!
+}
 
   type Publication {
   id: ID!

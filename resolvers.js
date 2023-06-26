@@ -34,9 +34,13 @@ const resolvers = {
         postsCount: profile.postsCount,
       };
     },
-    getAllProfile: async (_) => {
+    getAllProfile: async () => {
       const profiles = await fetchAllProfile();
-      return profiles;
+      return profiles.map((profile) => ({
+        ...profile,
+        followersCount: profile.followers.length,
+        followingCount: profile.following.length,
+      }));
     },
     getPublication: async (_, { id }) => {
       const publication = await fetchPublicationById(id);
@@ -81,14 +85,23 @@ const resolvers = {
         postsCount: profile.postsCount,
       };
     },
-    followProfile: ({ profileId, followedProfileId }) => {
-      return followProfile(profileId, followedProfileId);
+    followProfile: async (_, { profileId, followedProfileId }) => {
+      const profile = await followProfile(profileId, followedProfileId);
+      return profile.id;
     },
   },
-  User: {
-    posts: async (user) => {
-      const userPosts = await fetchUserPosts(user.id);
-      return userPosts;
+  Profile: {
+    followers: async (profile) => {
+      const followers = await Promise.all(
+        profile.followers.map((followerId) => fetchProfileById(followerId))
+      );
+      return followers;
+    },
+    following: async (profile) => {
+      const following = await Promise.all(
+        profile.following.map((followingId) => fetchProfileById(followingId))
+      );
+      return following;
     },
   },
 };

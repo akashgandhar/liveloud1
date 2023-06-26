@@ -17,6 +17,8 @@ async function fetchAllProfile() {
     followersCount: profile.followersCount,
     followingCount: profile.followingCount,
     postsCount: profile.postsCount,
+    followers: profile.followers,
+    following: profile.following,
   }));
 }
 async function fetchPublicationById(id) {
@@ -45,10 +47,11 @@ async function followProfile(profileId, followedProfileId) {
   const followedProfile = await fetchProfileById(followedProfileId);
 
   if (profile && followedProfile) {
-    profile.following.push(followedProfile);
-    followedProfile.followers.push(profile);
+    profile.following.push(followedProfileId);
+    followedProfile.followers.push(profileId);
   }
-  return profile.id;
+
+  return profile;
 }
 
 export {

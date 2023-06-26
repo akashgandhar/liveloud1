@@ -17,6 +17,8 @@ const Profiles = [
     followersCount: 1000,
     followingCount: 500,
     postsCount: 250,
+    followers: [],
+    following: [],
   },
   {
     id: "987654321",
@@ -28,6 +30,8 @@ const Profiles = [
     followersCount: 1500,
     followingCount: 700,
     postsCount: 300,
+    followers: [],
+    following: [],
   },
 ];
 
