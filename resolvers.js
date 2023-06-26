@@ -32,6 +32,8 @@ const resolvers = {
         followersCount: profile.followersCount,
         followingCount: profile.followingCount,
         postsCount: profile.postsCount,
+        followers: profile.followers,
+        following: profile.following,
       };
     },
     getAllProfile: async () => {
