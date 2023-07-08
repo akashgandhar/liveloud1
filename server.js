@@ -21,7 +21,7 @@ createServer(
     }),
   })
 ).listen(4001, () => {
-  console.info("GraphQL Yoga is listening on http://localhost:400/graphql")
+  console.info("GraphQL Yoga is listening on http://localhost:4001/graphql")
 })
 
 

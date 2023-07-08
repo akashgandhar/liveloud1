@@ -1,72 +1,72 @@
-// data.js
+function getData() {
+  // Implement the logic to fetch data from your database or external API
+  return null;
+}
 
-// Sample data representing users and posts
-const users = [
-  { id: "1", name: "John Doe", username: "johndoe" },
-  { id: "2", name: "Jane Smith", username: "janesmith" },
-];
+function updateData() {
+  // Implement the logic to update data in your database or external API
+  return null;
+}
 
-const Profiles = [
+export const dummyProfiles = [
   {
-    id: "123456789",
-    username: "john_doe",
+    id: "profile1",
     name: "John Doe",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    avatarURL: "https://example.com/avatar.png",
-    coverURL: "https://example.com/cover.png",
-    followersCount: 1000,
-    followingCount: 500,
-    postsCount: 250,
-    followers: [],
-    following: [],
+    bio: "Lorem ipsum dolor sit amet.",
+    handle: "johndoe",
+    picture: {
+      onChain: {
+        contractAddress: "0xcontract1",
+        tokenId: "token1",
+        uri: "https://example.com/image1.jpg",
+        chainId: 1,
+        verified: true,
+      },
+      original: {
+        uri: "https://example.com/image1.jpg",
+      },
+    },
+    ownedBy: "0xowner1",
+    dispatcher: {
+      address: "0xdispatcher1",
+      canUseRelay: true,
+      sponsor: false,
+    },
+    stats: {
+      id: "profile1",
+      totalFollowers: 100,
+      totalFollowing: 50,
+      totalPosts: 200,
+      totalComments: 300,
+      totalMirrors: 150,
+      totalPublications: 100,
+      totalCollects: 50,
+      commentsTotal: 50,
+      postsTotal: 100,
+      mirrorsTotal: 75,
+      publicationsTotal: 75,
+    },
+    onChainIdentity: {
+      proofOfHumanity: true,
+      ens: {
+        name: "johndoe.eth",
+      },
+      sybilDotOrg: {
+        verified: true,
+        source: {
+          twitter: {
+            handle: "@johndoe",
+          },
+        },
+      },
+      worldcoin: {
+        isHuman: true,
+      },
+    },
+    interests: ["Music", "Sports"],
   },
-  {
-    id: "987654321",
-    username: "jane_smith",
-    name: "Jane Smith",
-    bio: "Passionate about art and photography.",
-    avatarURL: "https://example.com/avatar/jane_smith.png",
-    coverURL: "https://example.com/cover/jane_smith.png",
-    followersCount: 1500,
-    followingCount: 700,
-    postsCount: 300,
-    followers: [],
-    following: [],
-  },
+  // Add more profiles as needed
 ];
 
-const publications = [
-  {
-    id: "1",
-    profileId: "123456789",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    mediaURLs: [
-      "https://example.com/media1.png",
-      "https://example.com/media2.png",
-    ],
-    createdAt: "2023-06-16",
-    likesCount: 100,
-    commentsCount: 50,
-    likedByMe: true,
-    collectedByMe: false,
-  },
-];
 
-const posts = [
-  { id: "1", content: "Hello, world!", authorId: "1", createdAt: "2023-06-16" },
-  {
-    id: "2",
-    content: "GraphQL is awesome!",
-    authorId: "2",
-    createdAt: "2023-06-15",
-  },
-  {
-    id: "3",
-    content: "Working on my social media app!",
-    authorId: "1",
-    createdAt: "2023-06-14",
-  },
-];
-
-export { Profiles, publications, posts };
+export { getData, updateData };

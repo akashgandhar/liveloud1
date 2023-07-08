@@ -1,110 +1,99 @@
-// resolvers.js
-
-import {
-  createUser,
-  fetchAllProfile,
-  fetchProfileById,
-  fetchPublicationById,
-  fetchUserById,
-  followProfile,
-} from "./functions.js";
+import { dummyProfiles } from "./data.js";
 
 const resolvers = {
   Query: {
-    getUser: async (_, { id }) => {
-      const user = await fetchUserById(id);
+    rel: (_, { request }) => {
+      // Implementation for the 'rel' query
+      // Fetch and return data based on the 'request' argument
+      return null;
+    },
+    cur: (_, { request }) => {
+      // Implementation for the 'cur' query
+      // Fetch and return data based on the 'request' argument
+      
+      return ['Currency1', 'Currency2', 'Currency3'];
+    },
+    gdm: (_, { request }) => {
+      // Implementation for the 'gdm' query
+      // Fetch and return data based on the 'request' argument
+      return ['http://example.com/image1.jpg', 'http://example.com/image2.jpg'];
+    },
+    gct: (_, { request }) => {
+      // Implementation for the 'gct' query
+      // Fetch and return data based on the 'request' argument
+      return ['Value1', 'Value2', 'Value3'];
+    },
+    iss: (_, { request }) => {
+      // Implementation for the 'iss' query
+      // Fetch and return data based on the 'request' argument
       return {
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        posts: user.posts,
+        ss: true,
+        dd: false,
       };
     },
-    getProfile: async (_, { id }) => {
-      const profile = await fetchProfileById(id);
+    challenge: (_, { request }) => {
+      // Implementation for the 'challenge' query
+      // Fetch and return data based on the 'request' argument
       return {
-        id: profile.id,
-        username: profile.username,
-        name: profile.name,
-        bio: profile.bio,
-        avatarURL: profile.avatarURL,
-        coverURL: profile.coverURL,
-        followersCount: profile.followersCount,
-        followingCount: profile.followingCount,
-        postsCount: profile.postsCount,
-        followers: profile.followers,
-        following: profile.following,
+        text: 'Authentication challenge',
       };
     },
-    getAllProfile: async () => {
-      const profiles = await fetchAllProfile();
-      return profiles.map((profile) => ({
-        ...profile,
-        followersCount: profile.followers.length,
-        followingCount: profile.following.length,
-      }));
+    verify: (_, { request }) => {
+      const { accessToken } = request;
+      // Perform verification logic based on the accessToken
+      // Return a boolean indicating the verification result
+      return true;
     },
-    getPublication: async (_, { id }) => {
-      const publication = await fetchPublicationById(id);
-      const profile = await fetchProfileById(publication.profileId);
+    txIdToTxHash: (_, { txId }) => {
+      // Perform logic to convert txId to TxHash
+      return `TxHash-${txId}`;
+    },
+    claimableHandles: () => {
+      // Fetch and return claimable handles data
       return {
-        id: publication.id,
-        profile: {
-          id: profile.id,
-          username: profile.username,
-          name: profile.name,
-          avatarURL: profile.avatarURL,
+        reservedHandles: [
+          {
+            id: 'claimableHandleId1',
+            handle: 'Handle1',
+            source: 'Source1',
+            expiry: '2023-07-31T12:00:00Z',
+          },
+          {
+            id: 'claimableHandleId2',
+            handle: 'Handle2',
+            source: 'Source2',
+            expiry: '2023-07-31T12:00:00Z',
+          },
+        ],
+        canClaimFreeTextHandle: true,
+      };
+    },
+    claimableStatus: () => {
+      // Perform logic to determine the claimable status
+      return 'ALREADY_CLAIMED';
+    },
+    isIDKitPhoneVerified: () => {
+      // Perform logic to check if IDKit phone is verified
+      return true;
+    },
+
+    exploreProfiles: (_, { request }) => {
+      // Perform logic to fetch explore profiles based on the request
+      // You can use the request parameters (limit, cursor, sortCriteria, etc.) to customize the query
+
+      // Get the explore profiles from the dummy data
+      const exploreProfileData = dummyProfiles;
+
+      return {
+        items: exploreProfileData,
+        pageInfo: {
+          prev: null,
+          next: null,
+          totalCount: exploreProfileData.length,
         },
-        title: publication.title,
-        content: publication.content,
-        mediaURLs: publication.mediaURLs,
-        createdAt: publication.createdAt,
-        likesCount: publication.likesCount,
-        commentsCount: publication.commentsCount,
-        likedByMe: publication.likedByMe,
-        collectedByMe: publication.collectedByMe,
       };
     },
-  },
-  Mutation: {
-    createProfile: async (_, { username, name, bio, avatarURL, coverURL }) => {
-      const profile = await createUser(
-        username,
-        name,
-        bio,
-        avatarURL,
-        coverURL
-      );
-      return {
-        id: profile.id,
-        username: profile.username,
-        name: profile.name,
-        bio: profile.bio,
-        avatarURL: profile.avatarURL,
-        coverURL: profile.coverURL,
-        followersCount: profile.followersCount,
-        followingCount: profile.followingCount,
-        postsCount: profile.postsCount,
-      };
-    },
-    followProfile: async (_, { profileId, followedProfileId }) => {
-      const profile = await followProfile(profileId, followedProfileId);
-      return profile.id;
-    },
-  },
-  Profile: {
-    followers: async (profile) => {
-      const followers = await Promise.all(
-        profile.followers.map((followerId) => fetchProfileById(followerId))
-      );
-      return followers;
-    },
-    following: async (profile) => {
-      const following = await Promise.all(
-        profile.following.map((followingId) => fetchProfileById(followingId))
-      );
-      return following;
-    },
+    
   },
 };
 
