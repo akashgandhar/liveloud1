@@ -81,50 +81,26 @@ const typeDefs = gql`
     globalProtocolStats(
       request: GlobalProtocolStatsRequest
     ): GlobalProtocolStats!
-    proxyActionStatus(
-      proxyActionId: ProxyActionId!
-    ): ProxyActionStatusResultUnion!
-    validatePublicationMetadata(
-      request: ValidatePublicationMetadataRequest!
-    ): PublicationValidateMetadataResult!
-    publicationMetadataStatus(
-      request: GetPublicationMetadataStatusRequest!
-    ): PublicationMetadataStatus!
-    publications(
-      request: PublicationsQueryRequest!
-    ): PaginatedPublicationResult!
+    proxyActionStatus(proxyActionId: ProxyActionId!): ProxyActionStatusResultUnion!
+    validatePublicationMetadata(request: ValidatePublicationMetadataRequest!): PublicationValidateMetadataResult!
+    publicationMetadataStatus(request: GetPublicationMetadataStatusRequest!): PublicationMetadataStatus!
+    publications(request: PublicationsQueryRequest!): PaginatedPublicationResult!
     publication(request: PublicationQueryRequest!): Publication
-    whoCollectedPublication(
-      request: WhoCollectedPublicationRequest!
-    ): PaginatedWhoCollectedResult!
-    profilePublicationsForSale(
-      request: ProfilePublicationsForSaleRequest!
-    ): PaginatedProfilePublicationsForSaleResult!
-    allPublicationsTags(
-      request: AllPublicationsTagsRequest!
-    ): PaginatedAllPublicationsTagsResult!
-    publicationsProfileBookmarks(
-      request: PublicationsProfileBookmarkedQueryRequest!
-    ): PaginatedPublicationResult!
-
+    whoCollectedPublication(request: WhoCollectedPublicationRequest!): PaginatedWhoCollectedResult!
+    profilePublicationsForSale(request: ProfilePublicationsForSaleRequest!): PaginatedProfilePublicationsForSaleResult!
+    allPublicationsTags(request: AllPublicationsTagsRequest!): PaginatedAllPublicationsTagsResult!
+    publicationsProfileBookmarks(request: PublicationsProfileBookmarkedQueryRequest!): PaginatedPublicationResult!
     forYou(request: PublicationForYouRequest!): PaginatedForYouResult!
-    whoReactedPublication(
-      request: WhoReactedPublicationRequest!
-    ): PaginatedWhoReactedResult!
+    whoReactedPublication(request: WhoReactedPublicationRequest!): PaginatedWhoReactedResult!
     relayQueues: [RelayQueueResult!]!
-    profilePublicationRevenue(
-      request: ProfilePublicationRevenueQueryRequest!
-    ): ProfilePublicationRevenueResult!
-    publicationRevenue(
-      request: PublicationRevenueQueryRequest!
-    ): PublicationRevenue
-    profileFollowRevenue(
-      request: ProfileFollowRevenueQueryRequest!
-    ): FollowRevenueResult!
+    profilePublicationRevenue(request: ProfilePublicationRevenueQueryRequest!): ProfilePublicationRevenueResult!
+    publicationRevenue(request: PublicationRevenueQueryRequest!): PublicationRevenue
+    profileFollowRevenue(request: ProfileFollowRevenueQueryRequest!): FollowRevenueResult!
     search(request: SearchQueryRequest!): SearchResult!
     userSigNonces: UserSigNonces!
     # getProfile(id: ID!): Profile,
   }
+
 
   scalar Void
 

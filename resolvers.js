@@ -1,4 +1,4 @@
-import { dummyProfiles } from "./data.js";
+import { profiles } from "./data.js";
 
 const resolvers = {
   Query: {
@@ -93,8 +93,47 @@ const resolvers = {
         },
       };
     },
+    profileInterests: () => {
+      // Extract profile interests from all profiles
+      const interests = profiles.flatMap((profile) => profile.interests);
+      // Remove duplicate interests and return the result
+      return [...new Set(interests)];
+    },
+    profiles: (_, { request }) => {
+      // Apply filters based on the request
+      const filteredProfiles = profiles
+        .filter((profile) => {
+          if (request.profileIds && request.profileIds.length > 0) {
+            return request.profileIds.includes(profile.id);
+          }
+          if (request.ownedBy && request.ownedBy.length > 0) {
+            return request.ownedBy.includes(profile.ownedBy);
+          }
+          if (request.handles && request.handles.length > 0) {
+            return request.handles.includes(profile.handle);
+          }
+          return true;
+        });
+
+      // Apply pagination
+      const { limit, cursor } = request;
+      const startIndex = cursor ? filteredProfiles.findIndex((profile) => profile.id === cursor) + 1 : 0;
+      const endIndex = limit ? startIndex + limit : undefined;
+      const paginatedProfiles = filteredProfiles.slice(startIndex, endIndex);
+
+      return {
+        items: paginatedProfiles,
+        pageInfo: {
+          prev: startIndex > 0 ? filteredProfiles[startIndex - 1].id : null,
+          next: endIndex < filteredProfiles.length ? filteredProfiles[endIndex].id : null,
+          totalCount: filteredProfiles.length,
+        },
+      };
+    },
     
   },
+  
+  
 };
 
 export default resolvers;

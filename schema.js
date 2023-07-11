@@ -1,6 +1,7 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
+    
   type Query {
     rel(request: RelRequest!): Void
     cur(request: CurRequest!): [String!]!
@@ -14,6 +15,8 @@ const typeDefs = gql`
     claimableStatus: ClaimStatus!
     isIDKitPhoneVerified: Boolean!
     exploreProfiles(request: ExploreProfilesRequest!): ExploreProfileResult!
+    profileInterests: [ProfileInterest!]!
+    profiles(request: ProfileQueryRequest!): PaginatedProfileResult!
   }
 
   input RelRequest {
@@ -79,6 +82,8 @@ const typeDefs = gql`
 
   scalar Void
   scalar Url
+  scalar ProfileInterest
+
 
   input ExploreProfilesRequest {
     limit: LimitScalar
@@ -145,6 +150,8 @@ const typeDefs = gql`
   scalar ProfileId
   scalar ContractAddress
   scalar Handle
+  scalar InternalPublicationId
+
   union ProfileMedia = NftImage | MediaSet
   type NftImage {
     contractAddress: ContractAddress!
@@ -337,6 +344,22 @@ const typeDefs = gql`
   }
 
   scalar ImageSizeTransform
+  input ProfileQueryRequest {
+    limit: LimitScalar
+    cursor: Cursor
+
+    profileIds: [ProfileId!]
+
+    ownedBy: [EthereumAddress!]
+
+    handles: [Handle!]
+
+    whoMirroredPublicationId: InternalPublicationId
+  }
+type PaginatedProfileResult {
+    items: [Profile!]!
+    pageInfo: PaginatedResultInfo!
+  }
 
 `;
 

@@ -1,0 +1,336 @@
+type Query {
+  rel(request: RelRequest!): Void
+  cur(request: CurRequest!): [String!]!
+  gdm(request: GdmRequest!): [Url!]!
+  gct(request: GctRequest!): [String!]!
+  iss(request: PriRequest!): PrfResponse!
+  challenge(request: ChallengeRequest!): AuthChallengeResult!
+  verify(request: VerifyRequest!): Boolean!
+  txIdToTxHash(txId: TxId!): TxHash!
+  claimableHandles: ClaimableHandles!
+  claimableStatus: ClaimStatus!
+  isIDKitPhoneVerified: Boolean!
+  exploreProfiles(request: ExploreProfilesRequest!): ExploreProfileResult!
+}
+
+input RelRequest {
+  secret: String!
+  ethereumAddress: String!
+}
+
+input CurRequest {
+  secret: String!
+}
+
+input GdmRequest {
+  secret: String!
+}
+
+input GctRequest {
+  secret: String!
+  hhh: String!
+}
+
+input PriRequest {
+  secret: String!
+  hhh: String!
+}
+
+input ChallengeRequest {
+  address: String!
+}
+
+input VerifyRequest {
+  accessToken: String!
+}
+
+scalar TxId
+scalar TxHash
+
+type ClaimableHandles {
+  reservedHandles: [ReservedClaimableHandle!]!
+  canClaimFreeTextHandle: Boolean!
+}
+
+type ReservedClaimableHandle {
+  id: ID!
+  handle: String!
+  source: String!
+  expiry: String!
+}
+
+enum ClaimStatus {
+  ALREADY_CLAIMED
+  CLAIM_FAILED
+  NOT_CLAIMED
+}
+
+type PrfResponse {
+  ss: Boolean!
+  dd: Boolean!
+}
+
+type AuthChallengeResult {
+  text: String!
+}
+
+scalar Void
+scalar Url
+
+input ExploreProfilesRequest {
+  limit: LimitScalar
+  cursor: Cursor
+  timestamp: TimestampScalar
+  sortCriteria: ProfileSortCriteria!
+  customFilters: [CustomFiltersTypes!] = []
+}
+scalar LimitScalar
+scalar Cursor
+scalar TimestampScalar
+enum ProfileSortCriteria {
+  CREATED_ON
+  MOST_FOLLOWERS
+  LATEST_CREATED
+  MOST_POSTS
+  MOST_COMMENTS
+  MOST_MIRRORS
+  MOST_PUBLICATION
+  MOST_COLLECTS
+}
+enum CustomFiltersTypes {
+  GARDENERS
+}
+type ExploreProfileResult {
+  items: [Profile!]!
+  pageInfo: PaginatedResultInfo!
+}
+type Profile {
+  id: ProfileId!
+
+  name: String
+
+  bio: String
+
+  followNftAddress: ContractAddress
+
+  metadata: Url
+
+  handle: Handle!
+
+  picture: ProfileMedia
+
+  coverPicture: ProfileMedia
+
+  ownedBy: EthereumAddress!
+
+  dispatcher: Dispatcher
+
+  stats: ProfileStats!
+
+  followModule: FollowModule
+
+  isDefault: Boolean!
+
+  attributes: [Attribute!]
+
+  onChainIdentity: OnChainIdentity!
+
+  interests: [ProfileInterest!]
+  isFollowedByMe(isFinalisedOnChain: Boolean): Boolean!
+  isFollowing(who: ProfileId): Boolean!
+}
+scalar ProfileId
+scalar ContractAddress
+scalar Handle
+union ProfileMedia = NftImage | MediaSet
+type NftImage {
+  contractAddress: ContractAddress!
+
+  tokenId: String!
+
+  uri: Url!
+
+  chainId: Int!
+
+  verified: Boolean!
+}
+
+type MediaSet {
+  onChain: Media!
+
+  original: Media!
+
+  optimized: Media
+
+  small: Media
+    @deprecated(
+      reason: "should not be used will always be null - use transform function to get small media"
+    )
+
+  medium: Media
+    @deprecated(
+      reason: "should not be used will always be null - use transform function to get small media"
+    )
+  transformed(params: MediaTransformParams!): Media
+}
+scalar EthereumAddress
+type Dispatcher {
+  address: EthereumAddress!
+
+  canUseRelay: Boolean!
+
+  sponsor: Boolean!
+}
+type ProfileStats {
+  id: ProfileId!
+
+  totalFollowers: Int!
+
+  totalFollowing: Int!
+
+  totalPosts: Int!
+
+  totalComments: Int!
+
+  totalMirrors: Int!
+
+  totalPublications: Int!
+
+  totalCollects: Int!
+  commentsTotal(forSources: [Sources!]!): Int!
+  postsTotal(forSources: [Sources!]!): Int!
+  mirrorsTotal(forSources: [Sources!]!): Int!
+  publicationsTotal(forSources: [Sources!]!): Int!
+}
+union FollowModule =
+    FeeFollowModuleSettings
+  | ProfileFollowModuleSettings
+  | RevertFollowModuleSettings
+  | UnknownFollowModuleSettings
+type FeeFollowModuleSettings {
+  type: FollowModules!
+  contractAddress: ContractAddress!
+
+  amount: ModuleFeeAmount!
+
+  recipient: EthereumAddress!
+}
+enum FollowModules {
+  FeeFollowModule
+  RevertFollowModule
+  ProfileFollowModule
+  UnknownFollowModule
+}
+
+type ModuleFeeAmount {
+  asset: Erc20!
+
+  value: String!
+}
+
+type Erc20 {
+  name: String!
+
+  symbol: String!
+
+  decimals: Int!
+
+  address: ContractAddress!
+}
+
+type ProfileFollowModuleSettings {
+  type: FollowModules!
+  contractAddress: ContractAddress!
+}
+
+type RevertFollowModuleSettings {
+  type: FollowModules!
+  contractAddress: ContractAddress!
+}
+
+type UnknownFollowModuleSettings {
+  type: FollowModules!
+  contractAddress: ContractAddress!
+
+  followModuleReturnData: FollowModuleData!
+}
+
+scalar FollowModuleData
+type Attribute {
+  displayType: String
+
+  traitType: String
+
+  key: String!
+
+  value: String!
+}
+type OnChainIdentity {
+  proofOfHumanity: Boolean!
+
+  ens: EnsOnChainIdentity
+
+  sybilDotOrg: SybilDotOrgIdentity!
+
+  worldcoin: WorldcoinIdentity!
+}
+
+type EnsOnChainIdentity {
+  name: Ens
+}
+
+scalar Ens
+
+type SybilDotOrgIdentity {
+  verified: Boolean!
+  source: SybilDotOrgIdentitySource!
+}
+
+type SybilDotOrgIdentitySource {
+  twitter: SybilDotOrgTwitterIdentity!
+}
+
+type SybilDotOrgTwitterIdentity {
+  handle: String
+}
+
+type WorldcoinIdentity {
+  isHuman: Boolean!
+}
+scalar ProfileInterest
+type PaginatedResultInfo {
+  prev: Cursor
+
+  next: Cursor
+
+  totalCount: Int
+}
+
+scalar Sources
+
+type Media {
+  url: Url!
+
+  width: Int
+
+  height: Int
+
+  size: Int
+
+  mimeType: MimeType
+
+  altTag: String
+
+  cover: Url
+}
+scalar Sources
+scalar MimeType
+input MediaTransformParams {
+  width: ImageSizeTransform = "auto"
+
+  height: ImageSizeTransform = "auto"
+
+  keepAspectRatio: Boolean = true
+}
+
+scalar ImageSizeTransform
